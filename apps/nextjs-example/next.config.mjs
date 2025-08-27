@@ -1,6 +1,8 @@
 const isProd = process.env.NODE_ENV === "production";
 const isVercel = process.env.NODE_ENV_VERCEL === "1";
 
+console.log(`Current log: isVercel: `, isVercel);
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "export",
