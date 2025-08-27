@@ -12,6 +12,14 @@ const nextConfig = {
   basePath: isProd ? (isVercel ? "" : "/aptos-wallet-adapter") : "",
   webpack: (config) => {
     config.resolve.fallback = { "@solana/web3.js": false };
+
+    // 设置 webpack 的 publicPath
+    if (isProd && !isVercel) {
+      config.output.publicPath = "/aptos-wallet-adapter/";
+    } else {
+      config.output.publicPath = "";
+    }
+
     return config;
   },
 };
