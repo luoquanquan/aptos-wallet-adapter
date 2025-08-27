@@ -39,6 +39,7 @@ import Image from "next/image";
 import { MyWallet } from "@/utils/standardWallet";
 import { registerWallet } from "@aptos-labs/wallet-standard";
 import { TransactionSubmitterToggle } from "@/components/TransactionSubmitterToggle";
+import { RotateKey } from "@/components/transactionFlows/RotateKey";
 
 // Example of how to register a browser extension wallet plugin.
 // Browser extension wallets should call registerWallet once on page load.
@@ -102,7 +103,13 @@ export default function Home() {
       {connected && (
         <>
           <TransactionParameters />
+          <RotateKey />
           <SingleSigner />
+          <SingleSigner
+            blackAddress
+            to="0x61dcf53c689e976dae7de2366630b9067d4d5c80a87dce5b6393a4c672e3e376"
+            title={"Single Signer Flow Black Address"}
+          />
           <Sponsor />
           <MultiAgent />
         </>

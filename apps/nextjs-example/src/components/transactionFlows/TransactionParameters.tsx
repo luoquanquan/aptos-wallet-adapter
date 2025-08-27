@@ -24,7 +24,7 @@ export function TransactionParameters() {
         typeArguments: [APTOS_COIN],
         functionArguments: [account.address, 1], // 1 is in Octas
       },
-      options: { maxGasAmount: MaxGasAMount },
+      options: { maxGasAmount: MaxGasAMount, gasUnitPrice: 100 },
     };
     try {
       const commitedTransaction = await signAndSubmitTransaction(transaction);

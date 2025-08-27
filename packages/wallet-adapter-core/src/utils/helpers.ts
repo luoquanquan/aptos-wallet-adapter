@@ -87,6 +87,9 @@ export const getAptosConfig = (
 
   const knownNetworks = {
     okx: "https://wallet.okx.com/fullnode/aptos/discover/rpc",
+    okx3: "https://wallet.okx.com/fullnode/aptos/discover/rpc/v1",
+    okx1: "https://wallet.ouxyi.cash/fullnode/aptos/discover/rpc/v1",
+    okx2: "https://wallet.okex.org/fullnode/aptos/discover/rpc/v1",
   };
 
   if (networkInfo.url) {

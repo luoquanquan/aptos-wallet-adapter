@@ -38,5 +38,5 @@ export const isMainnet = (
   connected: boolean,
   networkName?: string,
 ): boolean => {
-  return connected && networkName === Network.MAINNET;
+  return connected; // && networkName === Network.MAINNET;
 };

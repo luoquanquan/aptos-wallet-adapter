@@ -44,7 +44,7 @@ export function Sponsor() {
         function: "0x1::resource_account::create_resource_account",
         typeArguments: [],
         functionArguments: [
-          account.address,
+          account.address.toString(),
           AccountAddress.from("0x0").toUint8Array(),
         ],
       },

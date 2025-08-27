@@ -1,5 +1,5 @@
 import { isSendableNetwork, aptosClient } from "@/utils";
-import { parseTypeTag, AccountAddress, U64 } from "@aptos-labs/ts-sdk";
+import { parseTypeTag, AccountAddress, U64, Account } from "@aptos-labs/ts-sdk";
 import { InputTransactionData } from "@aptos-labs/wallet-adapter-core";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { Button } from "../ui/button";
@@ -17,7 +17,11 @@ function generateNonce() {
   return crypto.randomUUID().replaceAll("-", "");
 }
 
-export function SingleSigner() {
+export function SingleSigner({
+  to = "0x4bc4225cabd43aebd6f8dffe77f02559bb5537e82cb88011c771c6a728fd7cc1",
+  title = "Single Signer Flow",
+  blackAddress = false,
+}) {
   const { toast } = useToast();
   const {
     wallet,
@@ -116,7 +120,7 @@ export function SingleSigner() {
       data: {
         function: "0x1::coin::transfer",
         typeArguments: [APTOS_COIN],
-        functionArguments: [account.address, 1], // 1 is in Octas
+        functionArguments: [to, 1], // 1 是 Octas
       },
     };
     try {
@@ -145,7 +149,7 @@ export function SingleSigner() {
         bytecode:
           "0xa11ceb0b0700000a06010002030206050806070e2508334010731f010200030001000103060c050300083c53454c463e5f30046d61696e0d6170746f735f6163636f756e74087472616e73666572ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff000000000000000000000000000000000000000000000000000000000000000114636f6d70696c6174696f6e5f6d65746164617461090003322e3003322e31000001050b000b010b02110002",
         typeArguments: [],
-        functionArguments: [account.address, new U64(1)], // 1 is in Octas
+        functionArguments: [AccountAddress.fromString(to), new U64(1)], // 1 is in Octas
       },
     };
     try {
@@ -170,7 +174,7 @@ export function SingleSigner() {
         data: {
           function: "0x1::coin::transfer",
           typeArguments: [parseTypeTag(APTOS_COIN)],
-          functionArguments: [AccountAddress.from(account.address), new U64(1)], // 1 is in Octas
+          functionArguments: [AccountAddress.from(to), new U64(1)], // 1 is in Octas
         },
       });
       await aptosClient(network).waitForTransaction({
@@ -187,14 +191,17 @@ export function SingleSigner() {
 
   // Legacy typescript sdk support
   const onSignTransaction = async () => {
+    if (!account) return;
+
     try {
       const payload: InputTransactionData = {
         data: {
           function: "0x1::coin::transfer",
           typeArguments: [APTOS_COIN],
-          functionArguments: [account?.address, 1],
+          functionArguments: [to, 1],
         },
       };
+
       const response = await signTransaction({
         transactionOrPayload: payload,
       });
@@ -218,7 +225,7 @@ export function SingleSigner() {
         data: {
           function: "0x1::coin::transfer",
           typeArguments: [APTOS_COIN],
-          functionArguments: [account.address, 1],
+          functionArguments: [to, 1],
         },
       });
       const response = await signTransaction({
@@ -260,42 +267,71 @@ export function SingleSigner() {
     <>
       <Card>
         <CardHeader>
-          <CardTitle>Single Signer Flow</CardTitle>
+          <CardTitle>{title}</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-wrap gap-4">
-          <Button onClick={onSignAndSubmitTransaction} disabled={!sendable}>
-            Sign and submit transaction
+          <Button
+            variant={blackAddress ? "destructive" : "default"}
+            onClick={onSignAndSubmitTransaction}
+            disabled={!sendable}
+          >
+            Sign and submit transaction(raw)
           </Button>
           <Button
+            variant={blackAddress ? "destructive" : "default"}
             onClick={onSignAndSubmitScriptTransaction}
             disabled={!sendable}
           >
-            Sign and submit script transaction
+            Sign and submit script transaction(script)
           </Button>
-          <Button onClick={onSignAndSubmitBCSTransaction} disabled={!sendable}>
-            Sign and submit BCS transaction
+          <Button
+            variant={blackAddress ? "destructive" : "default"}
+            onClick={onSignAndSubmitBCSTransaction}
+            disabled={!sendable}
+          >
+            Sign and submit BCS transaction(raw)
           </Button>
-          <Button onClick={onSignTransaction} disabled={!sendable}>
-            Sign transaction
+          <Button
+            variant={blackAddress ? "destructive" : "default"}
+            onClick={onSignTransaction}
+            disabled={!sendable}
+          >
+            Sign transaction(hex)
           </Button>
-          <Button onClick={onSignRawTransaction} disabled={!sendable}>
-            Sign raw transaction
+          <Button
+            variant={blackAddress ? "destructive" : "default"}
+            onClick={onSignRawTransaction}
+            disabled={!sendable}
+          >
+            Sign raw transaction(hex)
           </Button>
-          <Button onClick={onSignMessage} disabled={!sendable}>
-            Sign message
-          </Button>
-          <Button onClick={onSignMessageAndVerify} disabled={!sendable}>
-            Sign message and verify
-          </Button>
-          <Button onClick={onSignIn} disabled={!sendable}>
+          {!blackAddress && (
+            <>
+              <Button
+                variant={blackAddress ? "destructive" : "default"}
+                onClick={onSignMessage}
+                disabled={!sendable}
+              >
+                Sign message
+              </Button>
+              <Button
+                variant={blackAddress ? "destructive" : "default"}
+                onClick={onSignMessageAndVerify}
+                disabled={!sendable}
+              >
+                Sign message and verify
+              </Button>
+            </>
+          )}
+          {/* <Button variant={blackAddress ? 'destructive' : 'default'}  onClick={onSignIn} disabled={!sendable}>
             Sign in
           </Button>
-          <Button onClick={onSignInError} disabled={!sendable}>
+          <Button variant={blackAddress ? 'destructive' : 'default'}  onClick={onSignInError} disabled={!sendable}>
             Sign in Error
-          </Button>
+          </Button> */}
         </CardContent>
       </Card>
-      <Card>
+      {/* <Card>
         <CardHeader>
           <CardTitle>Account Abstraction</CardTitle>
         </CardHeader>
@@ -308,7 +344,7 @@ export function SingleSigner() {
             Add authentication function
           </Button>
         </CardContent>
-      </Card>
+      </Card> */}
     </>
   );
 }
