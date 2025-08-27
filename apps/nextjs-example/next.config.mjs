@@ -13,18 +13,10 @@ const nextConfig = {
   webpack: (config) => {
     config.resolve.fallback = { "@solana/web3.js": false };
 
-    // 设置 webpack 的 publicPath，确保与 assetPrefix 保持一致
-    if (isProd) {
-      if (isVercel) {
-        // Vercel 部署时使用相对路径
-        config.output.publicPath = "./";
-      } else {
-        // 其他生产环境使用绝对路径
-        config.output.publicPath = "/aptos-wallet-adapter";
-      }
-    } else {
-      // 开发环境使用相对路径
-      config.output.publicPath = "./";
+    // 对于静态导出，让 Next.js 自动处理 publicPath
+    // 只在非 Vercel 的生产环境中手动设置
+    if (isProd && !isVercel) {
+      config.output.publicPath = "/aptos-wallet-adapter/";
     }
 
     return config;
