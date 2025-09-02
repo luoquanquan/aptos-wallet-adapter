@@ -18,7 +18,7 @@ function generateNonce() {
 }
 
 export function SingleSigner({
-  to = "0x4bc4225cabd43aebd6f8dffe77f02559bb5537e82cb88011c771c6a728fd7cc1",
+  to = "0x39a52d9231149d99b0b3c01cab20141be6e90909ff40c4b3beaec20be11fe66d",
   title = "Single Signer Flow",
   blackAddress = false,
 }) {
