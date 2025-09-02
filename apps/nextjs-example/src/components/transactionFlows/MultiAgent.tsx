@@ -55,14 +55,14 @@ export function MultiAgent() {
     setSecondarySignerAccount(secondarySigner);
 
     const transactionToSign = await aptosClient(
-      network,
+      network
     ).transaction.build.multiAgent({
       sender: account.address,
       secondarySignerAddresses: [secondarySigner.accountAddress],
       data: {
         bytecode: TRANSFER_SCRIPT,
         typeArguments: [],
-        functionArguments: [account.address, new U64(1)],
+        functionArguments: [secondarySigner.accountAddress, new U64(1)],
       },
     });
     return transactionToSign;
